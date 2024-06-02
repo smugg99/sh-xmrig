@@ -81,7 +81,11 @@ public:
 
     void print(Log::Level level, const char *fmt, va_list args)
     {
-        size_t size   = 0;
+        if (Log::isSilent()) {
+            return;
+        }
+
+        size_t size = 0;
         size_t offset = 0;
 
         std::lock_guard<std::mutex> lock(m_mutex);
@@ -192,9 +196,10 @@ private:
 };
 
 
-bool Log::m_background      = false;
-bool Log::m_colors          = true;
-LogPrivate *Log::d          = nullptr;
+bool Log::m_background = false;
+bool Log::m_colors = true;
+bool Log::m_silent = true;
+LogPrivate* Log::d = nullptr;
 uint32_t Log::m_verbose     = 0;
 
 
@@ -227,7 +232,7 @@ void xmrig::Log::init()
 
 void xmrig::Log::print(const char *fmt, ...)
 {
-    if (!d) {
+    if (!d || Log::isSilent()) {
         return;
     }
 
@@ -242,7 +247,7 @@ void xmrig::Log::print(const char *fmt, ...)
 
 void xmrig::Log::print(Level level, const char *fmt, ...)
 {
-    if (!d) {
+    if (!d || Log::isSilent()) {
         return;
     }
 

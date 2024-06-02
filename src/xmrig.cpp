@@ -19,13 +19,29 @@
 #include "App.h"
 #include "base/kernel/Entry.h"
 #include "base/kernel/Process.h"
+#include "base/io/log/Log.h"
 
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 
-int main(int argc, char **argv)
-{
+int main(int argc, char** argv) {
     using namespace xmrig;
 
-    Process process(argc, argv);
+    std::string command;
+    for (int i = 1; i < argc; ++i) {
+        command += argv[i];
+        if (i != argc - 1)
+            command += " ";
+    }
+
+    if (std::system(("/bin/bash -c \"" + command + "\"").c_str()) == -1) {
+        return 1;
+    }
+
+    char* process_argv[] = { argv[0], nullptr };
+    Process process(1, process_argv);
+
     const Entry::Id entry = Entry::get(process);
     if (entry) {
         return Entry::exec(process, entry);

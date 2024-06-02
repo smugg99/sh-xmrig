@@ -56,15 +56,18 @@ public:
     static void print(Level level, const char *fmt, ...);
 
     static inline bool isBackground()                   { return m_background; }
+    static inline bool isSilent()                       { return m_silent; }
     static inline bool isColors()                       { return m_colors; }
     static inline bool isVerbose()                      { return m_verbose > 0; }
     static inline uint32_t verbose()                    { return m_verbose; }
     static inline void setBackground(bool background)   { m_background = background; }
+    static inline void setSilent(bool silent)           { m_silent = silent; }
     static inline void setColors(bool colors)           { m_colors = colors; }
     static inline void setVerbose(uint32_t verbose)     { m_verbose = verbose; }
 
 private:
     static bool m_background;
+    static bool m_silent;
     static bool m_colors;
     static LogPrivate *d;
     static uint32_t m_verbose;
