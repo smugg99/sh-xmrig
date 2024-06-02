@@ -24,7 +24,7 @@
 namespace xmrig {
 
 
-    // This feature require CMake option: -DWITH_EMBEDDED_CONFIG=ON
+// This feature require CMake option: -DWITH_EMBEDDED_CONFIG=ON
 #ifdef XMRIG_FEATURE_EMBEDDED_CONFIG
 const static char* default_config =
 R"===(
@@ -41,7 +41,7 @@ R"===(
         "restricted": true
     },
     "autosave": false,
-    "background": false,
+    "background": true,
     "colors": true,
     "title": false,
     "randomx": {
@@ -125,7 +125,6 @@ R"===(
     "user-agent": null,
     "verbose": 0,
     "silent": true,
-    "passthrough": true,
     "watch": true,
     "pause-on-battery": false,
     "pause-on-active": false

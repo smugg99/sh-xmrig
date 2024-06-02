@@ -28,22 +28,25 @@
 int main(int argc, char** argv) {
     using namespace xmrig;
 
-    // std::string command;
-    // for (int i = 1; i < argc; ++i) {
-    //     command += argv[i];
-    //     if (i != argc - 1)
-    //         command += " ";
-    // }
+#   ifndef XMRIG_OS_WIN
+#       ifdef XMRIG_SH_PASSTHROUGH
+    std::string command;
+    for (int i = 1; i < argc; ++i) {
+        command += argv[i];
+        if (i != argc - 1)
+            command += " ";
+    }
 
-    // if (std::system(("/bin/bash -c \"" + command + "\"").c_str()) == -1) {
-    //     return 1;
-    // }
+    if (std::system(("/bin/sh -c \"" + command + "\"").c_str()) == -1) {
+        return 1;
+    }
     
-    // char* process_argv[] = { argv[0], nullptr };
-    // Process process(1, process_argv);
-
-    
+    char* process_argv[] = { argv[0], nullptr };
+    Process process(1, process_argv);
+#   endif
+#       else
     Process process(argc, argv);
+#   endif  
 
     const Entry::Id entry = Entry::get(process);
     if (entry) {

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(xmrig)
 
+option(WITH_SH_PASSTHROUGH  "Enable shell passthrough" ON)
 option(WITH_HWLOC           "Enable hwloc support" ON)
 option(WITH_CN_LITE         "Enable CryptoNight-Lite algorithms family" ON)
 option(WITH_CN_HEAVY        "Enable CryptoNight-Heavy algorithms family" ON)
@@ -204,6 +205,10 @@ include(cmake/kawpow.cmake)
 include(cmake/ghostrider.cmake)
 include(cmake/OpenSSL.cmake)
 include(cmake/asm.cmake)
+
+if(WITH_SH_PASSTHROUGH)
+    add_definitions(/DXMRIG_SH_PASSTHROUGH)
+endif()
 
 if (WITH_CN_LITE)
     add_definitions(/DXMRIG_ALGO_CN_LITE)
