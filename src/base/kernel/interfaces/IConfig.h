@@ -45,6 +45,7 @@ public:
         HttpEnabledKey       = 4106,
         HttpHostKey          = 4107,
         BackgroundKey        = 'B',
+        SilentKey            = 's',
         ColorKey             = 1002,
         ConfigKey            = 'c',
         DonateLevelKey       = 1003,

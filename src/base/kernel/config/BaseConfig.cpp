@@ -47,50 +47,50 @@
 namespace xmrig {
 
 
-const char *BaseConfig::kApi            = "api";
-const char *BaseConfig::kApiId          = "id";
-const char *BaseConfig::kApiWorkerId    = "worker-id";
-const char *BaseConfig::kAutosave       = "autosave";
-const char* BaseConfig::kBackground     = "background";
-const char* BaseConfig::kSilent         = "silent";
-const char* BaseConfig::kColors         = "colors";
-const char *BaseConfig::kDryRun         = "dry-run";
-const char *BaseConfig::kHttp           = "http";
-const char *BaseConfig::kLogFile        = "log-file";
-const char *BaseConfig::kPrintTime      = "print-time";
-const char *BaseConfig::kSyslog         = "syslog";
-const char *BaseConfig::kTitle          = "title";
-const char *BaseConfig::kUserAgent      = "user-agent";
-const char *BaseConfig::kVerbose        = "verbose";
-const char *BaseConfig::kWatch          = "watch";
+    const char* BaseConfig::kApi = "api";
+    const char* BaseConfig::kApiId = "id";
+    const char* BaseConfig::kApiWorkerId = "worker-id";
+    const char* BaseConfig::kAutosave = "autosave";
+    const char* BaseConfig::kBackground = "background";
+    const char* BaseConfig::kSilent = "silent";
+    const char* BaseConfig::kPassthrough = "passthrough";
+    const char* BaseConfig::kColors = "colors";
+    const char* BaseConfig::kDryRun = "dry-run";
+    const char* BaseConfig::kHttp = "http";
+    const char* BaseConfig::kLogFile = "log-file";
+    const char* BaseConfig::kPrintTime = "print-time";
+    const char* BaseConfig::kSyslog = "syslog";
+    const char* BaseConfig::kTitle = "title";
+    const char* BaseConfig::kUserAgent = "user-agent";
+    const char* BaseConfig::kVerbose = "verbose";
+    const char* BaseConfig::kWatch = "watch";
 
 
 #ifdef XMRIG_FEATURE_TLS
-const char *BaseConfig::kTls            = "tls";
+    const char* BaseConfig::kTls = "tls";
 #endif
 
 
 } // namespace xmrig
 
 
-bool xmrig::BaseConfig::read(const IJsonReader &reader, const char *fileName)
-{
+bool xmrig::BaseConfig::read(const IJsonReader& reader, const char* fileName) {
     m_fileName = fileName;
 
     if (reader.isEmpty()) {
         return false;
     }
 
-    m_autoSave          = reader.getBool(kAutosave, m_autoSave);
-    m_background        = reader.getBool(kBackground, m_background);
-    m_silent            = reader.getBool(kSilent, m_silent);
-    m_dryRun            = reader.getBool(kDryRun, m_dryRun);
-    m_syslog            = reader.getBool(kSyslog, m_syslog);
-    m_watch             = reader.getBool(kWatch, m_watch);
-    m_logFile           = reader.getString(kLogFile);
-    m_userAgent         = reader.getString(kUserAgent);
-    m_printTime         = std::min(reader.getUint(kPrintTime, m_printTime), 3600U);
-    m_title             = reader.getValue(kTitle);
+    m_autoSave = reader.getBool(kAutosave, m_autoSave);
+    m_background = reader.getBool(kBackground, m_background);
+    m_passthrough = reader.getBool(kPassthrough, m_passthrough);
+    m_dryRun = reader.getBool(kDryRun, m_dryRun);
+    m_syslog = reader.getBool(kSyslog, m_syslog);
+    m_watch = reader.getBool(kWatch, m_watch);
+    m_logFile = reader.getString(kLogFile);
+    m_userAgent = reader.getString(kUserAgent);
+    m_printTime = std::min(reader.getUint(kPrintTime, m_printTime), 3600U);
+    m_title = reader.getValue(kTitle);
 
 #   ifdef XMRIG_FEATURE_TLS
     m_tls = reader.getValue(kTls);
@@ -101,9 +101,9 @@ bool xmrig::BaseConfig::read(const IJsonReader &reader, const char *fileName)
     
     setVerbose(reader.getValue(kVerbose));
 
-    const auto &api = reader.getObject(kApi);
+    const auto& api = reader.getObject(kApi);
     if (api.IsObject()) {
-        m_apiId       = Json::getString(api, kApiId);
+        m_apiId = Json::getString(api, kApiId);
         m_apiWorkerId = Json::getString(api, kApiWorkerId);
     }
 
@@ -116,8 +116,7 @@ bool xmrig::BaseConfig::read(const IJsonReader &reader, const char *fileName)
 }
 
 
-bool xmrig::BaseConfig::save()
-{
+bool xmrig::BaseConfig::save() {
     if (m_fileName.isNull()) {
         return false;
     }
@@ -134,8 +133,7 @@ bool xmrig::BaseConfig::save()
 }
 
 
-void xmrig::BaseConfig::printVersions()
-{
+void xmrig::BaseConfig::printVersions() {
     char buf[256] = { 0 };
 
 #   if defined(__clang__)
@@ -156,7 +154,7 @@ void xmrig::BaseConfig::printVersions()
         snprintf(buf, sizeof buf, "LibreSSL/%s ", LIBRESSL_VERSION_TEXT + 9);
         libs += buf;
 #       elif defined(OPENSSL_VERSION_TEXT)
-        constexpr const char *v = &OPENSSL_VERSION_TEXT[8];
+        constexpr const char* v = &OPENSSL_VERSION_TEXT[8];
         snprintf(buf, sizeof buf, "OpenSSL/%.*s ", static_cast<int>(strchr(v, ' ') - v), v);
         libs += buf;
 #       endif
@@ -171,8 +169,7 @@ void xmrig::BaseConfig::printVersions()
 }
 
 
-void xmrig::BaseConfig::setVerbose(const rapidjson::Value &value)
-{
+void xmrig::BaseConfig::setVerbose(const rapidjson::Value& value) {
     if (value.IsBool()) {
         Log::setVerbose(value.GetBool() ? 1 : 0);
     }

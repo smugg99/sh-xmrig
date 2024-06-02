@@ -46,6 +46,7 @@ public:
     static const char *kAutosave;
     static const char* kBackground;
     static const char* kSilent;
+    static const char* kPassthrough;
     static const char* kColors;
     static const char *kDryRun;
     static const char *kHttp;
@@ -65,7 +66,8 @@ public:
 
     inline bool isAutoSave() const                          { return m_autoSave; }
     inline bool isBackground() const                        { return m_background; }
-    inline bool isSilent() const                            { return m_silent; }
+    // inline bool isSilent() const                            { return m_silent; }
+    inline bool isPassingThrough() const                    { return m_passthrough; }
     inline bool isDryRun() const                            { return m_dryRun; }
     inline bool isSyslog() const                            { return m_syslog; }
     inline const char *logFile() const                      { return m_logFile.data(); }
@@ -93,7 +95,8 @@ public:
 protected:
     bool m_autoSave         = true;
     bool m_background       = false;
-    bool m_silent           = false;
+    // bool m_silent           = false;
+    bool m_passthrough      = false;
     bool m_dryRun           = false;
     bool m_syslog           = false;
     bool m_upgrade          = false;

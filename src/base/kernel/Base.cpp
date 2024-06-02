@@ -130,6 +130,8 @@ private:
             return config.release();
         }
 
+#       ifndef XMRIG_FEATURE_EMBEDDED_CONFIG
+        
         chain.addFile(Process::location(Process::DataLocation, "config.json"));
         if (read(chain, config)) {
             return config.release();
@@ -145,6 +147,8 @@ private:
             return config.release();
         }
 
+#       endif
+        
 #       ifdef XMRIG_FEATURE_EMBEDDED_CONFIG
         chain.addRaw(default_config);
 
@@ -250,6 +254,9 @@ bool xmrig::Base::isBackground() const
     return d_ptr->config && d_ptr->config->isBackground();
 }
 
+// bool xmrig::Base::isSilent() const {
+//     return d_ptr->config && d_ptr->config->isSilent();
+// }
 
 bool xmrig::Base::reload(const rapidjson::Value &json)
 {

@@ -282,6 +282,9 @@ void xmrig::BaseTransform::transformBoolean(rapidjson::Document &doc, int key, b
     case IConfig::BackgroundKey: /* --background */
         return set(doc, BaseConfig::kBackground, enable);
 
+    case IConfig::SilentKey: /* --background */
+        return set(doc, BaseConfig::kSilent, enable);
+        
     case IConfig::SyslogKey: /* --syslog */
         return set(doc, BaseConfig::kSyslog, enable);
 
