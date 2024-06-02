@@ -1,6 +1,7 @@
 /* XMRig
  * Copyright (c) 2018-2021 SChernykh   <https://github.com/SChernykh>
  * Copyright (c) 2016-2021 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
+ * Copyright (c) 2024 smugg99          <https://github.com/smugg99>
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,6 +17,9 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef XMRIG_PASSTHROUGH_H
+#define XMRIG_PASSTHROUGH_H
+
 #include "App.h"
 #include "base/kernel/Entry.h"
 #include "base/kernel/Process.h"
@@ -23,34 +27,25 @@
 #include "core/Passthrough.h"
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <vector>
+#include <unistd.h>
+#include <sys/stat.h> 
+#include <string>
 
-int main(int argc, char** argv) {
-    using namespace xmrig;
+class Passthrough {
+public:
+	Passthrough(const std::string& filePath);
 
-    std::string lockFilePath = "/tmp/my_program.lock";
-    Passthrough passthrough(lockFilePath);
+	bool isAnotherInstanceRunning();
+	void createLockFile();
+	void removeLockFile();
+	int createProcess(int argc, char** argv, xmrig::Process* process);
+	int handlePassthrough(int argc, char** argv);
 
-    if (passthrough.isAnotherInstanceRunning()) {
-        LOG_ALERT("Another instance is already running!");
+private:
+	std::string lockFilePath;
+};
 
-        return passthrough.handlePassthrough(argc, argv);
-    }
-
-    passthrough.createLockFile();
-
-    Process process(argc, argv);
-    int returnCode = passthrough.createProcess(argc, argv, &process);
-
-    const Entry::Id entry = Entry::get(process);
-    if (entry) {
-        return Entry::exec(process, entry);
-    }
-
-    App app(&process);
-    app.addPassthrough(&passthrough);
-    app.exec();
-
-    return returnCode;
-}
+#endif /* XMRIG_PASSTHROUGH_H */

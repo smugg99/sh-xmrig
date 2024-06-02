@@ -37,24 +37,26 @@
 #include "base/kernel/Platform.h"
 #include "core/config/Config.h"
 #include "core/Controller.h"
+#include "core/Passthrough.h"
 #include "Summary.h"
 #include "version.h"
 
 
-xmrig::App::App(Process *process)
-{
+xmrig::App::App(Process* process) {
     m_controller = std::make_shared<Controller>(process);
 }
 
 
-xmrig::App::~App()
-{
+xmrig::App::~App() {
     Cpu::release();
 }
 
 
-int xmrig::App::exec()
-{
+void xmrig::App::addPassthrough(Passthrough* passthrough) {
+    m_passthrough = passthrough;
+}
+
+int xmrig::App::exec() {
     if (!m_controller->isReady()) {
         LOG_EMERG("no valid configuration found, try https://xmrig.com/wizard");
 
@@ -76,7 +78,8 @@ int xmrig::App::exec()
     if (!m_controller->isBackground()) {
         LOG_ALERT("Running in the foreground");
         m_console = std::make_shared<Console>(this);
-    } else {
+    }
+    else {
         LOG_ALERT("Running in the background");
     }
 
@@ -97,8 +100,7 @@ int xmrig::App::exec()
 }
 
 
-void xmrig::App::onConsoleCommand(char command)
-{
+void xmrig::App::onConsoleCommand(char command) {
     if (command == 3) {
         LOG_WARN("%s " YELLOW("Ctrl+C received, exiting"), Tags::signal());
         close();
@@ -109,10 +111,8 @@ void xmrig::App::onConsoleCommand(char command)
 }
 
 
-void xmrig::App::onSignal(int signum)
-{
-    switch (signum)
-    {
+void xmrig::App::onSignal(int signum) {
+    switch (signum) {
     case SIGHUP:
     case SIGTERM:
     case SIGINT:
@@ -124,11 +124,11 @@ void xmrig::App::onSignal(int signum)
 }
 
 
-void xmrig::App::close()
-{
+void xmrig::App::close() {
     m_signals.reset();
     m_console.reset();
 
+    m_passthrough->removeLockFile();
     m_controller->stop();
 
     Log::destroy();

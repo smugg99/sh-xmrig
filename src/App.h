@@ -30,10 +30,11 @@
 #include "base/kernel/interfaces/IConsoleListener.h"
 #include "base/kernel/interfaces/ISignalListener.h"
 #include "base/tools/Object.h"
-
+#include "core/Passthrough.h"
 
 #include <memory>
 
+class Passthrough;
 
 namespace xmrig {
 
@@ -44,7 +45,6 @@ class Network;
 class Process;
 class Signals;
 
-
 class App : public IConsoleListener, public ISignalListener
 {
 public:
@@ -53,6 +53,7 @@ public:
     App(Process *process);
     ~App() override;
 
+    void addPassthrough(Passthrough* passthrough);
     int exec();
 
 protected:
@@ -63,6 +64,7 @@ private:
     bool background(int &rc);
     void close();
 
+    Passthrough* m_passthrough;
     std::shared_ptr<Console> m_console;
     std::shared_ptr<Controller> m_controller;
     std::shared_ptr<Signals> m_signals;

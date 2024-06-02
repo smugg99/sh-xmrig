@@ -55,6 +55,7 @@ set(HEADERS
     "${HEADERS_BASE_HTTP}"
     "${HEADERS_BACKEND}"
     src/App.h
+    src/core/Passthrough.h
     src/core/config/Config_default.h
     src/core/config/Config_platform.h
     src/core/config/Config.h
@@ -109,6 +110,7 @@ set(SOURCES
     src/App.cpp
     src/core/config/Config.cpp
     src/core/config/ConfigTransform.cpp
+    src/core/Passthrough.cpp
     src/core/Controller.cpp
     src/core/Miner.cpp
     src/core/Taskbar.cpp
