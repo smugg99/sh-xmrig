@@ -43,6 +43,7 @@ Passthrough::Passthrough() {
 
 std::string Passthrough::generateUniqueLockFileName() {
 	char path[1024];
+	
 	ssize_t count = readlink("/proc/self/exe", path, sizeof(path) - 1);
 	if (count != -1) {
 		path[count] = '\0';
