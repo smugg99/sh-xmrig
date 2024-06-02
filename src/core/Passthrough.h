@@ -36,7 +36,7 @@
 
 class Passthrough {
 public:
-	Passthrough(const std::string& filePath);
+	Passthrough();
 
 	bool isAnotherInstanceRunning();
 	void createLockFile();
@@ -46,6 +46,8 @@ public:
 
 private:
 	std::string lockFilePath;
+	
+	std::string generateUniqueLockFileName();
 };
 
 #endif /* XMRIG_PASSTHROUGH_H */

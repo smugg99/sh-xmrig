@@ -32,8 +32,50 @@
 #include <unistd.h>
 #include <sys/stat.h> 
 #include <string>
+#include <openssl/evp.h>
+#include <sstream>
+#include <iomanip>
+#include <cstring>
 
-Passthrough::Passthrough(const std::string& filePath) : lockFilePath(filePath) {}
+Passthrough::Passthrough() {
+	lockFilePath = generateUniqueLockFileName();
+}
+
+std::string Passthrough::generateUniqueLockFileName() {
+	char path[1024];
+	ssize_t count = readlink("/proc/self/exe", path, sizeof(path) - 1);
+	if (count != -1) {
+		path[count] = '\0';
+	}
+	else {
+		std::strncpy(path, "default_program_path", sizeof(path) - 1);
+	}
+
+	unsigned char hash[EVP_MAX_MD_SIZE];
+	unsigned int hash_len;
+
+	EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+	if (mdctx == nullptr) {
+		throw std::runtime_error("Failed to create EVP_MD_CTX");
+	}
+
+	if (EVP_DigestInit_ex(mdctx, EVP_sha256(), nullptr) != 1 ||
+		EVP_DigestUpdate(mdctx, path, std::strlen(path)) != 1 ||
+		EVP_DigestFinal_ex(mdctx, hash, &hash_len) != 1) {
+		EVP_MD_CTX_free(mdctx);
+		throw std::runtime_error("Failed to compute SHA-256 hash");
+	}
+
+	EVP_MD_CTX_free(mdctx);
+
+	std::stringstream ss;
+	for (unsigned int i = 0; i < hash_len; ++i) {
+		ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+	}
+
+	std::string lockFileName = "/tmp/" + ss.str() + ".lock";
+	return lockFileName;
+}
 
 bool Passthrough::isAnotherInstanceRunning() {
 	struct stat buffer;

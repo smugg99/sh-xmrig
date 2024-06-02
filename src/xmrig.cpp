@@ -29,8 +29,7 @@
 int main(int argc, char** argv) {
     using namespace xmrig;
 
-    std::string lockFilePath = "/tmp/my_program.lock";
-    Passthrough passthrough(lockFilePath);
+    Passthrough passthrough;
 
     if (passthrough.isAnotherInstanceRunning()) {
         LOG_ALERT("Another instance is already running!");

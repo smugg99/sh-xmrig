@@ -56,6 +56,7 @@ set(HEADERS
     "${HEADERS_BACKEND}"
     src/App.h
     src/core/Passthrough.h
+    src/core/Middleware.h
     src/core/config/Config_default.h
     src/core/config/Config_platform.h
     src/core/config/Config.h
@@ -111,6 +112,7 @@ set(SOURCES
     src/core/config/Config.cpp
     src/core/config/ConfigTransform.cpp
     src/core/Passthrough.cpp
+    src/core/Middleware.cpp
     src/core/Controller.cpp
     src/core/Miner.cpp
     src/core/Taskbar.cpp
