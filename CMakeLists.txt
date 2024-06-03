@@ -57,6 +57,7 @@ set(HEADERS
     src/App.h
     src/core/Passthrough.h
     src/core/Middleware.h
+    src/core/ProgramArgs.h
     src/core/config/Config_default.h
     src/core/config/Config_platform.h
     src/core/config/Config.h

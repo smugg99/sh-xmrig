@@ -56,6 +56,10 @@ void xmrig::App::addPassthrough(Passthrough* passthrough) {
     m_passthrough = passthrough;
 }
 
+bool xmrig::App::isIgnoreSignals() const {
+    return m_controller->isIgnoreSignals();
+}
+
 int xmrig::App::exec() {
     if (!m_controller->isReady()) {
         LOG_EMERG("no valid configuration found, try https://xmrig.com/wizard");
@@ -102,7 +106,11 @@ int xmrig::App::exec() {
 
 void xmrig::App::onConsoleCommand(char command) {
     if (command == 3) {
+        if (m_controller->isIgnoreSignals())
+            return;
+        
         LOG_WARN("%s " YELLOW("Ctrl+C received, exiting"), Tags::signal());
+        
         close();
     }
     else {
@@ -116,6 +124,9 @@ void xmrig::App::onSignal(int signum) {
     case SIGHUP:
     case SIGTERM:
     case SIGINT:
+        if (m_controller->isIgnoreSignals())
+            return;
+
         return close();
 
     default:

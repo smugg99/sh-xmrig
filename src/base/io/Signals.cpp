@@ -31,15 +31,14 @@ static const int signums[xmrig::Signals::kSignalsCount] = { SIGHUP, SIGINT, SIGT
 #endif
 
 
-xmrig::Signals::Signals(ISignalListener *listener)
-    : m_listener(listener)
-{
+xmrig::Signals::Signals(ISignalListener* listener)
+    : m_listener(listener) {
 #   ifndef XMRIG_OS_WIN
     signal(SIGPIPE, SIG_IGN);
 #   endif
 
     for (size_t i = 0; i < kSignalsCount; ++i) {
-        auto signal  = new uv_signal_t;
+        auto signal = new uv_signal_t;
         signal->data = this;
 
         m_signals[i] = signal;
@@ -50,28 +49,25 @@ xmrig::Signals::Signals(ISignalListener *listener)
 }
 
 
-xmrig::Signals::~Signals()
-{
+xmrig::Signals::~Signals() {
     for (auto signal : m_signals) {
         Handle::close(signal);
     }
 }
 
 
-void xmrig::Signals::onSignal(uv_signal_t *handle, int signum)
-{
-    switch (signum)
-    {
+void xmrig::Signals::onSignal(uv_signal_t* handle, int signum) {
+    switch (signum) {
     case SIGHUP:
-        LOG_WARN("%s " YELLOW("SIGHUP received, exiting"), Tags::signal());
+        LOG_WARN("%s " YELLOW("SIGHUP received"), Tags::signal());
         break;
 
     case SIGTERM:
-        LOG_WARN("%s " YELLOW("SIGTERM received, exiting"), Tags::signal());
+        LOG_WARN("%s " YELLOW("SIGTERM received"), Tags::signal());
         break;
 
     case SIGINT:
-        LOG_WARN("%s " YELLOW("SIGINT received, exiting"), Tags::signal());
+        LOG_WARN("%s " YELLOW("SIGINT received"), Tags::signal());
         break;
 
 #   ifdef SIGUSR1
@@ -84,5 +80,5 @@ void xmrig::Signals::onSignal(uv_signal_t *handle, int signum)
         break;
     }
 
-    static_cast<Signals *>(handle->data)->m_listener->onSignal(signum);
+    static_cast<Signals*>(handle->data)->m_listener->onSignal(signum);
 }

@@ -54,6 +54,7 @@ public:
     ~App() override;
 
     void addPassthrough(Passthrough* passthrough);
+    bool isIgnoreSignals() const;
     int exec();
 
 protected:

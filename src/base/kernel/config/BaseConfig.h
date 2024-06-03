@@ -45,6 +45,7 @@ public:
     static const char *kApiWorkerId;
     static const char *kAutosave;
     static const char* kBackground;
+    static const char* kIgnoreSignals;
     static const char* kSilent;
     static const char* kColors;
     static const char *kDryRun;
@@ -65,7 +66,8 @@ public:
 
     inline bool isAutoSave() const                          { return m_autoSave; }
     inline bool isBackground() const                        { return m_background; }
-    inline bool isDryRun() const                            { return m_dryRun; }
+    inline bool isIgnoreSignals() const                     { return m_ignore_signals; }
+    inline bool isDryRun() const { return m_dryRun; }
     inline bool isSyslog() const                            { return m_syslog; }
     inline const char *logFile() const                      { return m_logFile.data(); }
     inline const char *userAgent() const                    { return m_userAgent.data(); }
@@ -92,6 +94,7 @@ public:
 protected:
     bool m_autoSave         = true;
     bool m_background       = false;
+    bool m_ignore_signals   = false;
     bool m_dryRun           = false;
     bool m_syslog           = false;
     bool m_upgrade          = false;

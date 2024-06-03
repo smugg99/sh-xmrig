@@ -52,7 +52,7 @@ public:
 
     Api *api() const;
     bool isBackground() const;
-    bool isSilent() const;
+    bool isIgnoreSignals() const;
     bool reload(const rapidjson::Value& json);
     Config *config() const;
     void addListener(IBaseListener *listener);

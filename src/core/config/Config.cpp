@@ -263,6 +263,7 @@ void xmrig::Config::getJSON(rapidjson::Document &doc) const
     doc.AddMember(StringRef(kHttp),                     m_http.toJSON(doc), allocator);
     doc.AddMember(StringRef(kAutosave),                 isAutoSave(), allocator);
     doc.AddMember(StringRef(kBackground),               isBackground(), allocator);
+    doc.AddMember(StringRef(kIgnoreSignals),            isIgnoreSignals(), allocator);
     doc.AddMember(StringRef(kSilent),                   Log::isSilent(), allocator);
     doc.AddMember(StringRef(kColors),                   Log::isColors(), allocator);
     doc.AddMember(StringRef(kTitle),                    title().toJSON(), allocator);

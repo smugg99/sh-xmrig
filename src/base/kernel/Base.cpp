@@ -254,9 +254,9 @@ bool xmrig::Base::isBackground() const
     return d_ptr->config && d_ptr->config->isBackground();
 }
 
-// bool xmrig::Base::isSilent() const {
-//     return d_ptr->config && d_ptr->config->isSilent();
-// }
+bool xmrig::Base::isIgnoreSignals() const {
+    return d_ptr->config && d_ptr->config->isIgnoreSignals();
+}
 
 bool xmrig::Base::reload(const rapidjson::Value &json)
 {

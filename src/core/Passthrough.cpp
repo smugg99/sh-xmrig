@@ -36,6 +36,9 @@
 #include <sstream>
 #include <iomanip>
 #include <cstring>
+#include <csignal>
+#include <iostream>
+#include <unistd.h>
 
 Passthrough::Passthrough() {
 	lockFilePath = generateUniqueLockFileName();
@@ -43,7 +46,7 @@ Passthrough::Passthrough() {
 
 std::string Passthrough::generateUniqueLockFileName() {
 	char path[1024];
-	
+
 	ssize_t count = readlink("/proc/self/exe", path, sizeof(path) - 1);
 	if (count != -1) {
 		path[count] = '\0';
@@ -78,6 +81,7 @@ std::string Passthrough::generateUniqueLockFileName() {
 	return lockFileName;
 }
 
+
 bool Passthrough::isAnotherInstanceRunning() {
 	struct stat buffer;
 	return (stat(lockFilePath.c_str(), &buffer) == 0);
@@ -93,11 +97,11 @@ void Passthrough::removeLockFile() {
 
 #   ifndef XMRIG_OS_WIN
 #       ifdef XMRIG_SH_PASSTHROUGH
-int Passthrough::handlePassthrough(int argc, char** argv) {
+int Passthrough::handlePassthrough(const ProgramArgs& args) {
 	std::string command;
-	for (int i = 1; i < argc; ++i) {
-		command += argv[i];
-		if (i != argc - 1)
+	for (int i = 1; i < args.argc; ++i) {
+		command += args.argv[i];
+		if (i != args.argc - 1)
 			command += " ";
 	}
 
@@ -106,18 +110,18 @@ int Passthrough::handlePassthrough(int argc, char** argv) {
 #   	endif
 #   endif
 
-int Passthrough::createProcess(int argc, char** argv, xmrig::Process* process) {
+int Passthrough::createProcess(const ProgramArgs& args, xmrig::Process* process) {
 #   ifndef XMRIG_OS_WIN
 #       ifdef XMRIG_SH_PASSTHROUGH
 
-	char* process_argv[] = { argv[0], nullptr };
+	char* process_argv[] = { args.argv[0], nullptr };
 	*process = xmrig::Process(1, process_argv);
-	
-	return this->handlePassthrough(argc, argv);
+
+	return this->handlePassthrough(args);
 #   endif
 #       else
-	*process = xmrig::Process(argc, argv);
+	*process = xmrig::Process(args.argc, args.argv);
 #   endif
 
-	return 0;
+	return EXIT_SUCCESS;
 }

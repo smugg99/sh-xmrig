@@ -52,6 +52,7 @@ namespace xmrig {
     const char* BaseConfig::kApiWorkerId = "worker-id";
     const char* BaseConfig::kAutosave = "autosave";
     const char* BaseConfig::kBackground = "background";
+    const char* BaseConfig::kIgnoreSignals = "ignore-signals";
     const char* BaseConfig::kSilent = "silent";
     const char* BaseConfig::kColors = "colors";
     const char* BaseConfig::kDryRun = "dry-run";
@@ -82,6 +83,7 @@ bool xmrig::BaseConfig::read(const IJsonReader& reader, const char* fileName) {
 
     m_autoSave = reader.getBool(kAutosave, m_autoSave);
     m_background = reader.getBool(kBackground, m_background);
+    m_ignore_signals = reader.getBool(kIgnoreSignals, m_ignore_signals);
     m_dryRun = reader.getBool(kDryRun, m_dryRun);
     m_syslog = reader.getBool(kSyslog, m_syslog);
     m_watch = reader.getBool(kWatch, m_watch);

