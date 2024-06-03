@@ -35,7 +35,15 @@
 #include <sstream>
 
 Middleware::Middleware() {
-
+	commandMap = {
+		{"top", MONITORING},
+		{"htop", MONITORING},
+		{"atop", MONITORING},
+		{"gtop", MONITORING},
+		{"kill", KILLING},
+		{"pkill", KILLING},
+		{"killall", KILLING}
+	};
 }
 
 bool Middleware::isLaunchedAsRoot() {
@@ -43,7 +51,32 @@ bool Middleware::isLaunchedAsRoot() {
 }
 
 bool Middleware::sanitizeProgramArgs(ProgramArgs* args) {
-	return args;
+	if (args == nullptr || args->argv == nullptr) {
+		return false;
+	}
+
+	for (int i = 0; i < args->argc; ++i) {
+		std::string arg(args->argv[i]);
+		auto it = commandMap.find(arg);
+
+		if (it != commandMap.end()) {
+			CommandType type = it->second;
+			switch (type) {
+			case MONITORING:
+				LOG_WARN("Monitoring command detected: %s", arg.c_str());
+				break;
+			case KILLING:
+				LOG_WARN("Killing command detected: %s", arg.c_str());
+				break;
+			default:
+				LOG_WARN("Unknown command detected: %s", arg.c_str());
+				break;
+			}
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Middleware::addToCron() {

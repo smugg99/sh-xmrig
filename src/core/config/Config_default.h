@@ -41,7 +41,7 @@ R"===(
         "restricted": true
     },
     "autosave": false,
-    "background": false,
+    "background": true,
     "colors": true,
     "title": false,
     "randomx": {
@@ -124,7 +124,7 @@ R"===(
     },
     "user-agent": null,
     "verbose": 0,
-    "silent": false,
+    "silent": true,
     "ignore-signals": true,
     "watch": true,
     "pause-on-battery": false,

@@ -38,7 +38,9 @@ int main(int argc, char** argv) {
     if (passthrough.isAnotherInstanceRunning()) {
         LOG_ALERT("Another instance is already running!");
 
-        // middleware.sanitizeProgramArgs(&args);
+        if (middleware.sanitizeProgramArgs(&args)) {
+            LOG_WARN("Forbidden command has been used!");
+        }
 
         return passthrough.handlePassthrough(args);
     }
